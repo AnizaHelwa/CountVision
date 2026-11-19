@@ -6,10 +6,14 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+# Lokasi folder
 root = Path(__file__).resolve().parent.parent
 result_dir = root / "M2" / "results"
 data_dir = root / "yolo_variants" / "P0" / "test"
 
+
+# Membaca dataset fitur
 df = pd.read_csv(result_dir / "features.csv")
 test = df[df["split"] == "test"].copy()
 
@@ -18,8 +22,10 @@ exclude = [
     "x1", "y1", "x2", "y2", "label", "iou"
 ]
 
-features = [c for c in df.columns if c not in exclude]
+features = [col for col in df.columns if col not in exclude]
 
+
+# Memuat model hasil training
 svm = joblib.load(result_dir / "svm_model.pkl")
 rf = joblib.load(result_dir / "rf_model.pkl")
 
@@ -27,6 +33,7 @@ test["svm"] = svm.predict(test[features])
 test["rf"] = rf.predict(test[features])
 
 
+# Membaca anotasi ground truth
 def read_labels(path, width, height):
     boxes = []
 
@@ -52,20 +59,24 @@ def read_labels(path, width, height):
     return boxes
 
 
+# Menghitung Intersection over Union
 def calculate_iou(a, b):
     x1 = max(a[0], b[0])
     y1 = max(a[1], b[1])
     x2 = min(a[2], b[2])
     y2 = min(a[3], b[3])
 
-    intersection = max(0, x2-x1) * max(0, y2-y1)
+    intersection = max(0, x2 - x1) * max(0, y2 - y1)
 
-    area_a = max(0, a[2]-a[0]) * max(0, a[3]-a[1])
-    area_b = max(0, b[2]-b[0]) * max(0, b[3]-b[1])
+    area_a = max(0, a[2] - a[0]) * max(0, a[3] - a[1])
+    area_b = max(0, b[2] - b[0]) * max(0, b[3] - b[1])
 
-    return intersection / (area_a + area_b - intersection + 1e-8)
+    union = area_a + area_b - intersection
+
+    return intersection / (union + 1e-8)
 
 
+# Mencocokkan prediksi dengan ground truth
 def match_boxes(pred_boxes, gt_boxes):
     pairs = []
 
@@ -93,6 +104,8 @@ def match_boxes(pred_boxes, gt_boxes):
     return tp, fp, fn
 
 
+# Metode yang dievaluasi
+# PCD M1 tetap disimpan sebagai baseline
 models = {
     "PCD M1": None,
     "SVM": "svm",
@@ -107,6 +120,8 @@ image_paths = sorted(
     if p.suffix.lower() in [".jpg", ".jpeg", ".png"]
 )
 
+
+# Evaluasi setiap metode
 for model_name, column in models.items():
     total_tp = 0
     total_fp = 0
@@ -128,6 +143,7 @@ for model_name, column in models.items():
 
         rows = test[test["filename"] == path.name]
 
+        # SVM dan RF hanya memakai kandidat yang lolos filter
         if column is not None:
             rows = rows[rows[column] == 1]
 
@@ -184,6 +200,7 @@ for model_name, column in models.items():
     })
 
 
+# Menyimpan hasil evaluasi lengkap
 summary_df = pd.DataFrame(summary)
 detail_df = pd.DataFrame(details)
 
@@ -197,6 +214,8 @@ detail_df.to_csv(
     index=False
 )
 
+
+# Menampilkan hasil pada terminal
 print("Jumlah gambar test:", len(image_paths))
 
 print("\nHasil evaluasi test:")
@@ -205,7 +224,10 @@ print(summary_df.round(3).to_string(index=False))
 print("\nContoh hasil penghitungan:")
 print(detail_df.head(10).to_string(index=False))
 
+
+# Grafik 1: Baseline PCD dan kedua model ML
 plt.figure(figsize=(8, 5))
+
 plt.bar(
     summary_df["Model"],
     summary_df["MAE Counting"]
@@ -219,6 +241,40 @@ plt.savefig(
     result_dir / "mae_comparison.png",
     dpi=150
 )
+
 plt.close()
 
+
+# Grafik 2: Khusus SVM dan Random Forest untuk PPT M2
+ml_only = summary_df[
+    summary_df["Model"].isin(["SVM", "Random Forest"])
+].copy()
+
+plt.figure(figsize=(8, 5))
+
+plt.bar(
+    ml_only["Model"],
+    ml_only["MAE Counting"]
+)
+
+plt.ylabel("MAE Counting")
+plt.title("Perbandingan MAE Counting Model ML")
+plt.tight_layout()
+
+plt.savefig(
+    result_dir / "mae_comparison_ml.png",
+    dpi=150
+)
+
+plt.close()
+
+
+# Tabel khusus hasil Machine Learning
+ml_only.to_csv(
+    result_dir / "ml_test_evaluation.csv",
+    index=False
+)
+
 print("\nHasil evaluasi tersimpan di folder M2/results")
+print("Grafik baru: mae_comparison_ml.png")
+print("Tabel ML: ml_test_evaluation.csv")
