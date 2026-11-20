@@ -349,7 +349,251 @@ File hasil akan tersimpan pada folder `M2/results/`.
 
 # Bagian M3: Model DL dan Integrasi
 
-[Diisi oleh M3: model, perbandingan raw vs preprocessed, hasil, cara menjalankan prototipe.]
+M3 mengembangkan model deep learning untuk mendeteksi dan menghitung buah anggur menggunakan **YOLO11n**. Model dilatih pada lima varian citra dari M1, yaitu P0–P4, untuk membandingkan pengaruh preprocessing terhadap hasil deteksi dan penghitungan.
+
+Pekerjaan M3 meliputi:
+- Training YOLO11n pada setiap varian citra.
+- Pemilihan confidence threshold menggunakan data validasi.
+- Evaluasi deteksi dan counting pada data test.
+- Perbandingan hasil dengan baseline PCD dan Machine Learning dari M2.
+- Integrasi preprocessing M1 dengan model YOLO dalam prototipe penghitungan satu foto.
+
+YOLO menerima citra dan anotasi bounding box secara langsung. Model SVM dan Random Forest dari M2 digunakan sebagai pembanding hasil.
+
+## Dataset dan Konfigurasi Training
+
+Dataset menggunakan satu kelas, yaitu `grape`, dengan pembagian berikut.
+
+| Split | Jumlah Foto | Jumlah Anotasi |
+|---|---:|---:|
+| Train | 61 | 699 |
+| Validation | 23 | 259 |
+| Test | 24 | 429 |
+| **Total** | **108** | **1.387** |
+
+Pembagian foto dan anotasi dibuat sama antarvarian agar hasil dapat dibandingkan.
+
+| Parameter | Konfigurasi |
+|---|---|
+| Model | YOLO11n |
+| Bobot awal | `yolo11n.pt` pretrained |
+| Epoch | 30 per varian |
+| Ukuran input | `imgsz=640` |
+| Batch size | 4 |
+| Device | CPU |
+| Workers | 0 |
+| Seed | 42 |
+| Bobot evaluasi | `P0_best.pt` sampai `P4_best.pt` |
+
+Konfigurasi dan hasil training setiap varian tersedia pada folder `M3/training_logs/`.
+
+## Varian Preprocessing
+
+Varian citra mengikuti konfigurasi pada `M1/grape_pipeline.py` dan `M1/preprocess.py`.
+
+| Varian | Preprocessing |
+|---|---|
+| P0 | Resize dengan sisi terpanjang maksimal 1024 piksel |
+| P1 | Resize + Gaussian blur 5×5 |
+| P2 | Resize + CLAHE |
+| P3 | Resize + gamma correction + CLAHE + Gaussian blur |
+| P4 | Resize + gamma correction + CLAHE + bilateral filter + sharpening |
+
+Parameter tambahan:
+- Gamma: 1,4.
+- CLAHE: clip limit 2,0 dan tile 8×8.
+- Bilateral filter: k=9.
+- Sharpening: sigma 1,5 dan amount 0,7.
+
+P0 menjadi baseline **raw image** dalam eksperimen ini, tetapi citra tetap sudah melalui resize dan ekspor JPEG. P1–P4 memperoleh pengolahan citra tambahan sebelum digunakan oleh YOLO.
+
+Input YOLO menggunakan citra hasil preprocessing tanpa melalui segmentasi HSV atau watershed.
+
+## Protokol Evaluasi
+
+Evaluasi dilakukan melalui `M3/evaluate_yolo.py` dengan tahapan:
+
+1. Memuat bobot model masing-masing varian.
+2. Menguji confidence threshold 0,10–0,90 dengan interval 0,10 pada 23 foto validasi.
+3. Memilih threshold dengan F1 tertinggi. Jika F1 sama, dipilih MAE lebih rendah.
+4. Menggunakan threshold terpilih untuk mengevaluasi 24 foto test.
+5. Menyimpan hasil evaluasi dalam file CSV.
+
+Bounding box prediksi dicocokkan dengan anotasi secara **satu-lawan-satu pada IoU ≥ 0,5**, dimulai dari pasangan dengan IoU tertinggi.
+
+| Istilah | Pengertian |
+|---|---|
+| TP | Prediksi yang berhasil dicocokkan dengan anotasi |
+| FP | Prediksi yang tidak memiliki pasangan anotasi |
+| FN | Anotasi yang tidak memiliki pasangan prediksi |
+| F1-score | Gabungan precision dan recall untuk menilai kualitas deteksi |
+| MAE Counting | Rata-rata selisih absolut jumlah prediksi dan jumlah anotasi per foto |
+
+Rumus yang digunakan:
+
+```text
+F1 = 2TP / (2TP + FP + FN)
+
+MAE = Σ|jumlah prediksi − jumlah anotasi| / jumlah foto
+```
+
+F1 dihitung dari akumulasi TP, FP, dan FN seluruh foto. Semakin tinggi F1 dan semakin rendah MAE, semakin baik hasilnya.
+
+IoU untuk NMS saat prediksi adalah **0,70**, sedangkan IoU untuk pencocokan evaluasi adalah **0,50**. Keduanya memiliki fungsi berbeda.
+
+## Hasil Evaluasi Test
+
+Hasil berikut berasal dari `M3/hasil_evaluasi_yolo/ringkasan_test.csv`.
+
+| Model | Confidence | F1-score | MAE (butir/foto) | TP | FP | FN |
+|---|---:|---:|---:|---:|---:|---:|
+| YOLO P0 | 0,50 | 97,24% | 0,583 | 422 | 17 | 7 |
+| YOLO P1 | 0,60 | 97,66% | 0,583 | 417 | 8 | 12 |
+| YOLO P2 | 0,50 | 98,95% | 0,375 | 424 | 4 | 5 |
+| YOLO P3 | 0,30 | 98,61% | 0,333 | 427 | 10 | 2 |
+| **YOLO P4** | **0,50** | **99,19%** | **0,125** | **426** | **4** | **3** |
+
+Pada data test ini, P4 memperoleh F1 tertinggi dan MAE terendah. Dibandingkan P0, F1 meningkat sekitar **1,95 poin persentase**, sedangkan MAE turun dari **0,583 menjadi 0,125 butir/foto**.
+
+MAE P4 sebesar 0,125 pada 24 foto berarti total selisih absolut jumlah prediksi dan anotasi adalah **3 butir**. Nilai tersebut merupakan kesalahan jumlah, bukan jumlah seluruh kesalahan deteksi.
+
+P3 memiliki MAE lebih rendah daripada P2, tetapi F1 sedikit lebih rendah. Hal ini menunjukkan bahwa ketepatan jumlah dan kualitas deteksi mengukur aspek yang berbeda.
+
+## Perbandingan dengan PCD dan Machine Learning
+
+Hasil gabungan tersedia dalam `M3/hasil_evaluasi_yolo/perbandingan_M1_M2_M3.csv`.
+
+| Metode | F1 Deteksi pada IoU ≥ 0,5 | MAE (butir/foto) |
+|---|---:|---:|
+| PCD M1 melalui evaluator M2 | 30,54% | 6,583 |
+| SVM | 34,25% | 5,917 |
+| Random Forest | 34,17% | 6,083 |
+| YOLO P0 | 97,24% | 0,583 |
+| YOLO P4 | 99,19% | 0,125 |
+
+Pada pengujian ini, YOLO menghasilkan kualitas deteksi dan penghitungan lebih tinggi dibandingkan baseline klasik.
+
+SVM dan Random Forest hanya menyaring kandidat yang telah dihasilkan tahap segmentasi. Karena itu, objek yang tidak muncul sebagai kandidat tidak dapat dipulihkan oleh kedua model tersebut. YOLO memprediksi lokasi objek langsung dari citra.
+
+**Catatan:** hasil PCD pada tabel ini berasal dari evaluator M2 dengan IoU ≥ 0,5. Angkanya berbeda dari eksperimen M1 yang melaporkan F1@0,3. Hasil klasifikasi kandidat pada validation M2 juga merupakan metrik berbeda dari F1 deteksi pada tabel ini.
+
+## Contoh Keberhasilan dan Kesalahan
+
+| Contoh | Model | Jumlah Anotasi | Jumlah Prediksi | Keterangan |
+|---|---|---:|---:|---|
+| `grape_006` | P2 | 10 | 10 | FP=0 dan FN=0 |
+| `grape_099` | P2 | 28 | 27 | FP=0 dan FN=1 |
+| `grape_006` | P4 pada demo | 10 | 10 | Jumlah prediksi sesuai anotasi |
+
+Pada `grape_099`, terdapat satu anggur beranotasi yang belum terdeteksi. Kondisi buah yang berdekatan, tertutup sebagian, atau mirip dengan latar merupakan kemungkinan sumber kesalahan yang perlu diperiksa melalui perbandingan prediksi dan anotasi.
+
+### Contoh Demo P4
+
+![Demo P4: 10 butir anggur](M3/demo_output/grape_006_jpg.rf.49e9c296ee6b6acb644568a30ebd490f_P4_demo.jpg)
+
+### Contoh Kesalahan P2
+
+![P2: 27 prediksi dari 28 anotasi](M3/hasil_evaluasi_yolo/grape_099_jpg.rf.2a8b2affd41f200b0a43b423003f93f4_deteksi.jpg)
+
+Gambar tersebut merupakan contoh visual. Evaluasi kuantitatif tetap dilakukan terhadap seluruh 24 foto test.
+
+## Isi Folder M3
+
+| File atau Folder | Fungsi |
+|---|---|
+| `evaluate_yolo.py` | Pemilihan confidence pada validasi dan evaluasi test P0–P4 |
+| `demo.py` | Preprocessing P4, deteksi, penghitungan, dan penyimpanan gambar hasil |
+| `models/P0_best.pt`–`P4_best.pt` | Bobot model hasil training |
+| `training_logs/P0/`–`P4/` | Konfigurasi, metrik per epoch, dan grafik training |
+| `hasil_evaluasi_yolo/P*_validasi.csv` | Hasil evaluasi setiap confidence pada data validasi |
+| `hasil_evaluasi_yolo/P*_test_per_foto.csv` | Anotasi, prediksi, error absolut, TP, FP, dan FN per foto |
+| `hasil_evaluasi_yolo/ringkasan_test.csv` | Ringkasan hasil test seluruh varian |
+| `hasil_evaluasi_yolo/perbandingan_M1_M2_M3.csv` | Perbandingan hasil PCD, ML, dan YOLO |
+| `demo_output/` | Gambar keluaran prototipe |
+
+File `.pt` merupakan file biner model sehingga tidak ditampilkan sebagai teks biasa di VS Code.
+
+Evaluator menghasilkan CSV validasi, hasil per foto, dan ringkasan test. Tabel gabungan serta gambar analisis disiapkan secara terpisah.
+
+## Cara Menjalankan
+
+Perintah berikut menggunakan **PowerShell dari root repository CountVision**, yaitu direktori yang berisi folder `M1`, `M2`, dan `M3`.
+
+### 1. Instal Dependensi
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install ultralytics==8.4.213 opencv-python numpy
+```
+
+Perintah menggunakan interpreter Python secara langsung sehingga tidak memerlukan aktivasi environment atau launcher `yolo.exe`.
+
+### 2. Siapkan Dataset dan Path M1
+
+Letakkan dataset P0–P4 pada folder:
+
+```text
+CountVision/yolo_variants/
+```
+
+Setiap varian harus memiliki folder `train`, `valid`, dan `test`, masing-masing berisi `images` dan `labels`.
+
+Kode evaluasi saat ini membaca dataset dari `CountVision/yolo_variants/`. Jika dataset hasil ekspor berada di `M1/data/yolo_variants/`, tempatkan salinannya pada lokasi yang dibaca evaluator atau sesuaikan path pada kode.
+
+Bobot model tersedia pada `M3/models/`.
+
+Agar demo dapat mengimpor `M1/preprocess.py`, jalankan perintah berikut pada terminal yang sama:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path .\M1).Path
+```
+
+Pengaturan ini berlaku untuk sesi terminal tersebut.
+
+### 3. Jalankan Evaluasi
+
+```powershell
+.\.venv\Scripts\python.exe .\M3\evaluate_yolo.py
+```
+
+Hasil tersimpan pada `M3/hasil_evaluasi_yolo/`. File CSV dengan nama yang sama akan ditimpa.
+
+Proses ini menggunakan bobot model yang sudah tersedia dan tidak melakukan training ulang.
+
+### 4. Jalankan Demo pada Foto Asli
+
+Ganti path berikut dengan lokasi foto JPG atau PNG yang ingin diuji:
+
+```powershell
+.\.venv\Scripts\python.exe .\M3\demo.py "C:\lokasi\foto_anggur.jpg"
+```
+
+Demo akan menerapkan preprocessing P4 sebelum melakukan prediksi.
+
+Untuk foto yang sudah diproses menjadi P4, gunakan `--sudah-p4` agar preprocessing tidak dilakukan dua kali:
+
+```powershell
+.\.venv\Scripts\python.exe .\M3\demo.py ".\yolo_variants\P4\test\images\grape_006_jpg.rf.49e9c296ee6b6acb644568a30ebd490f.jpg" --sudah-p4
+```
+
+Prototipe menggunakan:
+- Model `P4_best.pt`.
+- Confidence 0,50.
+- IoU NMS 0,70.
+- Ukuran input 640.
+- Device CPU.
+
+Keluaran berupa jumlah anggur di terminal dan gambar hasil deteksi pada folder `M3/demo_output/`.
+
+## Temuan dan Keterbatasan
+
+1. P4 menghasilkan F1 tertinggi dan MAE terendah pada data test yang digunakan.
+2. Preprocessing memberikan hasil berbeda antarvarian; peningkatan kualitas citra tidak selalu meningkatkan semua metrik secara bersamaan.
+3. Dataset test hanya terdiri dari 24 foto, sehingga hasil belum menjamin performa yang sama pada kondisi baru.
+4. Eksperimen menggunakan satu seed dan belum diulang untuk mengukur variasi hasil training.
+5. P4 digunakan dalam demo setelah hasil perbandingan diamati. Pemilihan varian untuk eksperimen berikutnya perlu menggunakan validasi dan dikonfirmasi pada data baru yang belum dipakai untuk keputusan desain.
+6. Perbandingan ini belum mengisolasi kontribusi masing-masing operasi preprocessing, sehingga peningkatan P4 tidak dapat dikaitkan hanya dengan satu filter.
+7. Prototipe masih berupa pemrosesan satu foto melalui terminal. Pengembangan berikutnya dapat mencakup antarmuka pengguna dan pengujian pada kondisi yang lebih beragam.
 
 ---
 
