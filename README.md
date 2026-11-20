@@ -8,9 +8,9 @@ Proyek mata kuliah **Pengenalan Citra Digital dan Computer Vision**. Sistem ini 
 
 | Folder | Penanggung jawab | Isi |
 |---|---|---|
-| `M1/` | [nama M1] | Akuisisi dan pelabelan data, EDA, preprocessing, segmentasi, penghitungan klasik (baseline) |
-| `M2/` | [nama M2] | Ekstraksi fitur dan ML klasik |
-| `M3/` | [nama M3] | Model DL (YOLO) dan prototipe |
+| `M1/` | Aniza Helwa Mahanani | Akuisisi dan pelabelan data, EDA, preprocessing, segmentasi, penghitungan klasik (baseline) |
+| `M2/` | Alyaa Rahma Nabilah | Ekstraksi fitur dan ML klasik |
+| `M3/` | Ifka Rosmalita | Model DL (YOLO) dan prototipe |
 
 ## Struktur repositori
 
