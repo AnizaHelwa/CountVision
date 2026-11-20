@@ -1,0 +1,38 @@
+{
+  "cfg": {
+    "max_side": 1024,
+    "color_space": "lab",
+    "gamma": null,
+    "clahe": null,
+    "denoise": null,
+    "sharpen": null,
+    "hsv": {
+      "hue_ranges": [
+        [
+          0,
+          12
+        ],
+        [
+          130,
+          179
+        ]
+      ],
+      "s_min": 70,
+      "v_min": 15,
+      "v_max": 255
+    },
+    "lab": {
+      "a_min": 140,
+      "b_max": 135,
+      "l_max": 200
+    },
+    "morph": {
+      "open_k": 5,
+      "close_k": 7,
+      "fill_hole_area": 400
+    }
+  },
+  "params": {
+    "min_area": 200
+  }
+}

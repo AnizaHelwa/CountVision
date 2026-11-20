@@ -1,0 +1,44 @@
+{
+  "cfg": {
+    "max_side": 1024,
+    "color_space": "hsv",
+    "gamma": null,
+    "clahe": null,
+    "denoise": {
+      "method": "gaussian",
+      "k": 5
+    },
+    "sharpen": null,
+    "hsv": {
+      "hue_ranges": [
+        [
+          0,
+          12
+        ],
+        [
+          130,
+          179
+        ]
+      ],
+      "s_min": 140,
+      "v_min": 15,
+      "v_max": 255
+    },
+    "lab": {
+      "a_min": 145,
+      "b_max": 145,
+      "l_max": 200
+    },
+    "morph": {
+      "open_k": 9,
+      "close_k": 7,
+      "fill_hole_area": 400
+    }
+  },
+  "params": {
+    "min_dist": 45,
+    "min_peak": 10,
+    "min_area": 1000,
+    "smooth": 5
+  }
+}

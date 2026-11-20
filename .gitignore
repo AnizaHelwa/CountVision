@@ -1,0 +1,32 @@
+# lingkungan Python
+venv/
+__pycache__/
+*.pyc
+
+# foto dan data berat (dibagikan lewat Google Drive)
+foto_asli/
+foto_baru/
+data/raw/
+data/processed/
+data/excluded/
+data/yolo_variants/
+upload_roboflow/
+data/labels/**/images/
+data/labels/**/*.jpg
+data/labels/**/*.jpeg
+data/labels/**/*.png
+
+# gambar hasil olahan dan arsip
+contact_sheets/
+grid_baru/
+cek_label/
+hasil_*/vis_*/
+hasil_P0_arsip/
+*.zip
+
+# cadangan
+metadata_backup*.csv
+split_backup.csv
+
+data/labels_backup/
+*.rf.*.jpg

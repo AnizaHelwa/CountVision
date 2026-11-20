@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['grape']
+
+roboflow:
+  workspace: anizas-workspace-czv2l
+  project: countvision-vu1y2
+  version: 1
+  license: Private
+  url: https://app.roboflow.com/anizas-workspace-czv2l/countvision-vu1y2/1

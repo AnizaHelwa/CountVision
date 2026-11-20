@@ -1,0 +1,32 @@
+{
+  "cfg": {
+    "max_side": 1024,
+    "gamma": null,
+    "clahe": null,
+    "denoise": null,
+    "sharpen": null,
+    "hsv": {
+      "hue_ranges": [
+        [
+          0,
+          12
+        ],
+        [
+          130,
+          179
+        ]
+      ],
+      "s_min": 90,
+      "v_min": 15,
+      "v_max": 170
+    },
+    "morph": {
+      "open_k": 7,
+      "close_k": 7,
+      "fill_hole_area": 400
+    }
+  },
+  "params": {
+    "min_area": 200
+  }
+}
