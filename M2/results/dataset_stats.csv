@@ -1,0 +1,4 @@
+split,jumlah_gambar,jumlah_gt,jumlah_kandidat
+train,61,699,594
+valid,23,259,213
+test,24,429,383
