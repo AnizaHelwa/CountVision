@@ -1,0 +1,25 @@
+filename,Random Forest,SVM,ground_truth,YOLO P0,YOLO P1,YOLO P2,YOLO P3,YOLO P4,error_SVM,error_Random Forest,error_YOLO P0,error_YOLO P1,error_YOLO P2,error_YOLO P3,error_YOLO P4,jenis_error_SVM
+grape_006_jpg.rf.49e9c296ee6b6acb644568a30ebd490f.jpg,10,10,10,10,10,10,10,10,0,0,0,0,0,0,0,Jumlah sesuai
+grape_011_jpg.rf.f1ce8aa2bc529e6789459c697afb12c7.jpg,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,Jumlah sesuai
+grape_020_jpg.rf.a8e5bcf3364fd47db0af63e00b70408b.jpg,9,9,10,11,11,11,11,10,1,1,1,1,1,1,0,Undercounting
+grape_030_jpg.rf.597e2716c4bd3767bc65960869ff29a2.jpg,8,8,8,8,8,8,8,8,0,0,0,0,0,0,0,Jumlah sesuai
+grape_034_jpg.rf.13f046e91a72e57d986fb2046ed9cd8c.jpg,7,7,6,7,7,7,7,7,1,1,1,1,1,1,1,Overcounting
+grape_067_jpg.rf.314fe1c6d978dacae005e3574f9a85c0.jpg,10,10,8,9,8,8,8,8,2,2,1,0,0,0,0,Overcounting
+grape_068_jpg.rf.ac02ac2aca8b93af83533e44ac052308.jpg,9,9,8,9,8,8,8,8,1,1,1,0,0,0,0,Overcounting
+grape_069_jpg.rf.006cb6c2ad035b732e186625d704eece.jpg,2,2,8,9,8,8,8,8,6,6,1,0,0,0,0,Undercounting
+grape_070_jpg.rf.17e28e03b30eba84ed06650e8395b87b.jpg,5,7,8,8,8,8,8,8,1,3,0,0,0,0,0,Undercounting
+grape_071_jpg.rf.853b244d72a95ab255b2b1014d85ebbd.jpg,7,7,8,10,9,8,8,8,1,1,2,1,0,0,0,Undercounting
+grape_072_jpg.rf.1e0f009822ccdb87866cc9f4b9bd8d17.jpg,8,7,8,9,9,9,9,8,1,0,1,1,1,1,0,Undercounting
+grape_073_jpg.rf.a98c11b1ee158dca0015937e0db8ef7d.jpg,5,6,8,8,8,8,8,8,2,3,0,0,0,0,0,Undercounting
+grape_093_jpg.rf.2c02b0e8923d5145d6a5e15498778ed9.jpg,15,14,28,28,28,28,28,28,14,13,0,0,0,0,0,Undercounting
+grape_094_jpg.rf.41cd091f34d3efde4d672793cf20671d.jpg,17,16,28,29,29,29,29,28,12,11,1,1,1,1,0,Undercounting
+grape_095_jpg.rf.8797cbdd139ffb02866940829689d835.jpg,20,20,28,29,26,28,28,28,8,8,1,2,0,0,0,Undercounting
+grape_096_jpg.rf.a381d0d6eef1073408093260a282e777.jpg,22,22,28,28,28,28,29,28,6,6,0,0,0,1,0,Undercounting
+grape_097_jpg.rf.08e184a8ff4cf71c08f7db8f2d96daef.jpg,21,23,28,29,28,28,28,28,5,7,1,0,0,0,0,Undercounting
+grape_098_jpg.rf.3ceed079b6367242e568a25d621ba24f.jpg,19,19,28,27,27,27,28,27,9,9,1,1,1,0,1,Undercounting
+grape_099_jpg.rf.2a8b2affd41f200b0a43b423003f93f4.jpg,15,15,28,28,26,27,28,28,13,13,0,2,1,0,0,Undercounting
+grape_100_jpg.rf.b5d70c54923eda3a3cac6d1277d64eb3.jpg,14,14,28,28,27,27,29,28,14,14,0,1,1,1,0,Undercounting
+grape_101_jpg.rf.ff1823bd9a8d6820caac9f99d7e9c939.jpg,21,23,28,28,28,28,28,28,5,7,0,0,0,0,0,Undercounting
+grape_102_jpg.rf.6284448b0b283e7d5941fbada841d993.jpg,10,10,28,28,27,27,30,29,18,18,0,1,1,2,1,Undercounting
+grape_103_jpg.rf.502c6494b0af95aa4a504fb24807b087.jpg,19,19,28,27,26,27,28,28,9,9,1,2,1,0,0,Undercounting
+grape_104_jpg.rf.aebf69631ca8bc36f3b65c6ebfd9b0b5.jpg,15,15,28,29,28,28,28,28,13,13,1,0,0,0,0,Undercounting
