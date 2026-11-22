@@ -349,8 +349,6 @@ File hasil akan tersimpan pada folder `M2/results/`.
 
 # Bagian M3: Model Deep Learning dan Integrasi Sistem
 
-**Penanggung jawab: Ifka Rosmalita Nur Nazjila**
-
 ## Gambaran Umum
 
 M3 mengembangkan model deep learning untuk mendeteksi dan menghitung buah anggur menggunakan **YOLO11n**. Model dilatih pada lima varian citra dari M1, yaitu P0–P4, untuk membandingkan pengaruh preprocessing terhadap kualitas deteksi dan penghitungan.
