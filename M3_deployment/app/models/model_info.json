@@ -1,0 +1,52 @@
+{
+  "model": "YOLO11n",
+  "source_weights": "M3/models/P4_best.pt",
+  "variant": "P4",
+  "classes": {
+    "0": "grape"
+  },
+  "training_ultralytics_version": "8.4.213",
+  "version_evidence": "Log training Ifka di percakapan",
+  "imgsz": 640,
+  "confidence": 0.5,
+  "nms_iou": 0.7,
+  "max_det": 300,
+  "device": "cpu",
+  "weight_bytes": 5489882,
+  "weight_sha256": "c3481f449e49d5efbf20fd464ad0250367ddc29d53b38f31cf65fea25860b4f4",
+  "preprocessing": {
+    "max_side": 1024,
+    "gamma": 1.4,
+    "clahe": {
+      "clip": 2.0,
+      "tile": 8
+    },
+    "denoise": {
+      "method": "bilateral",
+      "k": 9,
+      "sigmaColor": 50,
+      "sigmaSpace": 50
+    },
+    "sharpen": {
+      "sigma": 1.5,
+      "amount": 0.7
+    },
+    "jpeg_quality": 95,
+    "order": [
+      "resize",
+      "gamma",
+      "CLAHE LAB-L",
+      "bilateral",
+      "sharpen",
+      "JPEG encode/decode"
+    ]
+  },
+  "repository_commit": "291338b4950db1f87eb62f8a2b2cfb27fdbd125e",
+  "validation_samples_status": "complete: validation_samples/predictions.csv",
+  "cpu_benchmark_status": "complete: cpu_benchmark.json",
+  "historical_cpu_measurement": {
+    "inference_ms": 160.4,
+    "cpu": "Intel Core i5-13450HX",
+    "scope": "Satu foto P4 dari log terdahulu; bukan benchmark rata-rata dan bukan jaminan server."
+  }
+}
