@@ -1,0 +1,3 @@
+Model,Undercounting,Overcounting,Jumlah Tepat,Total Gambar,MAE
+SVM,18,3,3,24,5.917
+Random Forest,17,3,4,24,6.083

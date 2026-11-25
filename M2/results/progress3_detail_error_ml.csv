@@ -1,0 +1,25 @@
+filename,ground_truth,SVM,Random Forest,error_SVM,jenis_SVM,error_Random Forest,jenis_Random Forest
+grape_006_jpg.rf.49e9c296ee6b6acb644568a30ebd490f.jpg,10,10,10,0,Jumlah Tepat,0,Jumlah Tepat
+grape_011_jpg.rf.f1ce8aa2bc529e6789459c697afb12c7.jpg,3,3,3,0,Jumlah Tepat,0,Jumlah Tepat
+grape_020_jpg.rf.a8e5bcf3364fd47db0af63e00b70408b.jpg,10,9,9,1,Undercounting,1,Undercounting
+grape_030_jpg.rf.597e2716c4bd3767bc65960869ff29a2.jpg,8,8,8,0,Jumlah Tepat,0,Jumlah Tepat
+grape_034_jpg.rf.13f046e91a72e57d986fb2046ed9cd8c.jpg,6,7,7,1,Overcounting,1,Overcounting
+grape_067_jpg.rf.314fe1c6d978dacae005e3574f9a85c0.jpg,8,10,10,2,Overcounting,2,Overcounting
+grape_068_jpg.rf.ac02ac2aca8b93af83533e44ac052308.jpg,8,9,9,1,Overcounting,1,Overcounting
+grape_069_jpg.rf.006cb6c2ad035b732e186625d704eece.jpg,8,2,2,6,Undercounting,6,Undercounting
+grape_070_jpg.rf.17e28e03b30eba84ed06650e8395b87b.jpg,8,7,5,1,Undercounting,3,Undercounting
+grape_071_jpg.rf.853b244d72a95ab255b2b1014d85ebbd.jpg,8,7,7,1,Undercounting,1,Undercounting
+grape_072_jpg.rf.1e0f009822ccdb87866cc9f4b9bd8d17.jpg,8,7,8,1,Undercounting,0,Jumlah Tepat
+grape_073_jpg.rf.a98c11b1ee158dca0015937e0db8ef7d.jpg,8,6,5,2,Undercounting,3,Undercounting
+grape_093_jpg.rf.2c02b0e8923d5145d6a5e15498778ed9.jpg,28,14,15,14,Undercounting,13,Undercounting
+grape_094_jpg.rf.41cd091f34d3efde4d672793cf20671d.jpg,28,16,17,12,Undercounting,11,Undercounting
+grape_095_jpg.rf.8797cbdd139ffb02866940829689d835.jpg,28,20,20,8,Undercounting,8,Undercounting
+grape_096_jpg.rf.a381d0d6eef1073408093260a282e777.jpg,28,22,22,6,Undercounting,6,Undercounting
+grape_097_jpg.rf.08e184a8ff4cf71c08f7db8f2d96daef.jpg,28,23,21,5,Undercounting,7,Undercounting
+grape_098_jpg.rf.3ceed079b6367242e568a25d621ba24f.jpg,28,19,19,9,Undercounting,9,Undercounting
+grape_099_jpg.rf.2a8b2affd41f200b0a43b423003f93f4.jpg,28,15,15,13,Undercounting,13,Undercounting
+grape_100_jpg.rf.b5d70c54923eda3a3cac6d1277d64eb3.jpg,28,14,14,14,Undercounting,14,Undercounting
+grape_101_jpg.rf.ff1823bd9a8d6820caac9f99d7e9c939.jpg,28,23,21,5,Undercounting,7,Undercounting
+grape_102_jpg.rf.6284448b0b283e7d5941fbada841d993.jpg,28,10,10,18,Undercounting,18,Undercounting
+grape_103_jpg.rf.502c6494b0af95aa4a504fb24807b087.jpg,28,19,19,9,Undercounting,9,Undercounting
+grape_104_jpg.rf.aebf69631ca8bc36f3b65c6ebfd9b0b5.jpg,28,15,15,13,Undercounting,13,Undercounting
