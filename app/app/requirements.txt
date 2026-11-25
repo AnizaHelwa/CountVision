@@ -1,0 +1,9 @@
+streamlit
+opencv-python-headless
+numpy
+pillow
+scikit-image
+scikit-learn
+joblib
+# untuk mode YOLO (berat; pasang saat M3 sudah menyerahkan model):
+# ultralytics
