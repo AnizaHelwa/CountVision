@@ -183,3 +183,39 @@ pada lima foto validasi, batch 1.
 Waktu tersebut tidak mencakup pembacaan file, preprocessing M1,
 pemuatan model, rendering, atau jaringan.
 Performa pada server dapat berbeda dari laptop pengujian.
+
+## 9. Eksperimen C — PCD + Deep Learning
+
+M3 menguji dua bentuk pemrosesan citra sebelum YOLO:
+
+- P1–P4: preprocessing citra sebelum deteksi.
+- P5_SEG: penerapan mask segmentasi HSV dan morfologi M1
+  pada citra berwarna sebelum deteksi YOLO11n.
+
+P5_SEG dilatih selama 30 epoch dengan pembagian dataset
+yang sama: 61 foto train, 23 validasi, dan 24 test.
+Confidence dipilih dari validasi, dengan nilai terpilih 0,50.
+
+### Hasil Test P5_SEG
+
+| Metrik | Nilai |
+|---|---:|
+| Precision | 97,39% |
+| Recall | 78,32% |
+| F1 deteksi | 86,82% |
+| MAE counting | 3,583 butir/foto |
+| TP / FP / FN | 336 / 9 / 93 |
+
+File terkait:
+
+- Skrip: `M3/segmentasi_yolo.py`
+- Bobot: `M3/models/P5_SEG_best.pt`
+- Hasil evaluasi: `M3/hasil_segmentasi_yolo/`
+- Log training: `M3/training_runs/P5_SEG_train30/`
+
+P5_SEG merupakan eksperimen pembanding. Model default website
+tetap P4, yang memperoleh F1 99,19% dan MAE 0,125 pada test.
+
+Jika P5_SEG ditambahkan sebagai pilihan website, gunakan bobot
+P5_SEG dan preprocessing segmentasinya sendiri. Jangan menggunakan
+fungsi preprocessing P4 untuk bobot P5_SEG.
