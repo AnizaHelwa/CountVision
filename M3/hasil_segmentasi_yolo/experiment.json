@@ -1,0 +1,41 @@
+{
+  "variant": "P5_SEG",
+  "source": "P0",
+  "method": "M1 HSV + morphology mask applied to BGR image",
+  "config": {
+    "max_side": 1024,
+    "color_space": "hsv",
+    "gamma": null,
+    "clahe": null,
+    "denoise": null,
+    "sharpen": null,
+    "hsv": {
+      "hue_ranges": [
+        [
+          0,
+          12
+        ],
+        [
+          130,
+          179
+        ]
+      ],
+      "s_min": 120,
+      "v_min": 15,
+      "v_max": 255
+    },
+    "lab": {
+      "a_min": 145,
+      "b_max": 145,
+      "l_max": 200
+    },
+    "morph": {
+      "open_k": 9,
+      "close_k": 7,
+      "fill_hole_area": 400
+    }
+  },
+  "labels": "Original ground truth retained, including objects removed by mask",
+  "preprocess_sha256": "ac37e544638c1805e2815010b05e97f2a15cc71862d075f4b078bfd578965f17",
+  "note": "Full-frame masked RGB/BGR image, not instance segmentation and not B1 candidate crops"
+}

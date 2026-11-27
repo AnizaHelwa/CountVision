@@ -1,0 +1,5 @@
+{
+  "save_dir": "C:\\Users\\LENOVO\\Downloads\\M1-20261115T134739Z-1-001\\M1\\M3\\training_runs\\P5_SEG_train30",
+  "best": "C:\\Users\\LENOVO\\Downloads\\M1-20261115T134739Z-1-001\\M1\\M3\\training_runs\\P5_SEG_train30\\weights\\best.pt",
+  "epochs": 30
+}

@@ -1,0 +1,18 @@
+{
+  "split": "test",
+  "images": 24,
+  "ground_truth_instances": 429,
+  "confidence": 0.5,
+  "matching_iou": 0.5,
+  "nms_iou": 0.7,
+  "TP": 426,
+  "FP": 4,
+  "FN": 3,
+  "Precision": 0.9906976744186047,
+  "Recall": 0.993006993006993,
+  "F1": 0.9918509895227008,
+  "MAE": 0.125,
+  "count_exact_images": 21,
+  "source": "evidence/P4_test_per_foto.csv",
+  "note": "Metrik agregat deteksi satu-ke-satu; bukan rata-rata F1 per foto. Train dan valid tidak digabung ke hasil test."
+}
